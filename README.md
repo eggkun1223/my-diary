@@ -24,7 +24,10 @@ npm run preview    # 빌드 결과를 로컬에서 확인
 | `src/components/` | 목록·달력·설정·편집기·읽기 화면·아래 탭 |
 | `src/components/Doodles.jsx` | 손그림 표정·날씨·스티커 |
 | `src/components/Photos.jsx` | 사진 줄이기(긴 쪽 1600px), 폴라로이드, 크게 보기 |
-| `vite.config.js` | PWA 설정 (앱 이름, 아이콘, 오프라인 캐시) |
+| `vite.config.js` | PWA 설정 (앱 이름, 아이콘, 오프라인 캐시), 배포용 보안 설정(CSP) |
+| `public/theme.js` | 그리기 전에 저장된 테마 적용. CSP 가 HTML 안 스크립트를 막아서 파일로 뺐다 |
+
+CSP 는 배포용 빌드에만 들어간다(개발 서버는 HTML 안 스크립트가 필요). 외부 주소에서 무언가 불러오는 기능을 넣으면 `vite.config.js` 의 `CSP` 도 함께 고칠 것.
 
 ## 배포 (GitHub Pages)
 

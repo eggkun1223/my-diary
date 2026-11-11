@@ -2,9 +2,33 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
+// 보안 설정(CSP): 앱이 이 사이트 밖으로 데이터를 보내거나 외부 스크립트를 불러오지 못하게 막는다.
+// 개발 서버는 화면 자동 갱신에 HTML 안 스크립트를 쓰므로 배포용 빌드에만 넣는다.
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self'",
+  "img-src 'self' blob: data:", // 사진은 blob:, 백업에서 읽은 사진은 data:
+  "font-src 'self'",
+  "connect-src 'self' data:", // 백업 가져오기에서 사진(data:)을 파일로 바꿀 때
+  "worker-src 'self'",
+  "manifest-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'none'",
+].join('; ')
+
+const cspMeta = {
+  name: 'csp-meta',
+  apply: 'build',
+  transformIndexHtml: (html) =>
+    html.replace('<meta charset="UTF-8" />', `<meta charset="UTF-8" />\n    <meta http-equiv="Content-Security-Policy" content="${CSP}" />`),
+}
+
 export default defineConfig({
   base: './', // GitHub Pages 같은 하위 경로에서도 동작하도록
   plugins: [
+    cspMeta,
     react(),
     VitePWA({
       registerType: 'autoUpdate',
